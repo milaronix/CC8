@@ -1,9 +1,16 @@
 import java.io.IOException;
 
-public class Lab2 {
+public class Lab3 {
     public static void main(String[] args) throws IOException {
         
-        Servidor server = new Servidor(2407);
+        if (args.length != 1) {
+            System.err.println("Uso: java Lab3 <config.txt>");
+            System.exit(1);
+        }
+        
+        String configFile = args[0];
+        
+        Servidor server = new Servidor(2407, configFile);
         new Thread(server).start();
 
         try {
@@ -12,6 +19,6 @@ public class Lab2 {
             e.printStackTrace();
         }
         System.out.println("Stopping Server");
-        server.stop(); 
+        server.stop();  
     }
 }

@@ -1,6 +1,11 @@
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 
 public class Servidor implements Runnable{
 
@@ -8,9 +13,21 @@ public class Servidor implements Runnable{
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
+    protected int          maxThreads   = 5;
 
-    public Servidor(int port){
+    public Servidor(int port,String configFile){
         this.serverPort = port;
+        try {
+            BufferedReader in2 = new BufferedReader(new FileReader(configFile));
+            String str;
+            while ((str = in2.readLine()) != null)
+                if (str.indexOf("MaxThreads=") >= 0) {
+                    this.maxThreads = Integer.parseInt(str.substring(str.indexOf("=")+1,str.length()));
+                }
+            in2.close();
+        } catch (IOException e) {
+            System.out.println("File Not Found");
+        }
     }
 
     public void run(){
@@ -18,6 +35,8 @@ public class Servidor implements Runnable{
             this.runningThread = Thread.currentThread();
         }
         openServerSocket();
+
+        ExecutorService executor = Executors.newFixedThreadPool(this.maxThreads);
         while(! isStopped()){
             Socket clientSocket = null;
             try {
@@ -30,10 +49,8 @@ public class Servidor implements Runnable{
                 throw new RuntimeException(
                     "Error accepting client connection", e);
             }
-            new Thread(
-                new Trabajo(
-                    clientSocket, "Multithreaded Server")
-            ).start();
+            Runnable worker = new Trabajo(clientSocket, "Multithreaded Server");
+            executor.execute(worker);
         }
         System.out.println("Server Stopped.") ;
     }
@@ -59,5 +76,6 @@ public class Servidor implements Runnable{
             throw new RuntimeException("Cannot open port 2407", e);
         }
     }
+
 
 }
