@@ -11,9 +11,12 @@ public class Trabajo implements Runnable{
     protected Socket clientSocket = null;
     protected String serverText   = null;
 
-    public Trabajo(Socket clientSocket, String serverText) {
-        this.clientSocket = clientSocket;
+    public Trabajo(String serverText) {        
         this.serverText   = serverText;
+    }
+
+    public void setSocket (Socket socket){
+        this.clientSocket = socket;
     }
 
     public void run() {
