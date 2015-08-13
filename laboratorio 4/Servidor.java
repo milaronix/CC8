@@ -28,6 +28,7 @@ public class Servidor implements Runnable{
         } catch (IOException e) {
             System.out.println("File Not Found");
         }
+        System.out.println("Servidor bien inicializado");
     }
 
     public void run(){
@@ -49,7 +50,9 @@ public class Servidor implements Runnable{
                 throw new RuntimeException(
                     "Error accepting client connection", e);
             }
-            Runnable worker = new Trabajo(clientSocket, "Multithreaded Server");
+            Runnable worker = new Trabajo("Multithreaded Server");
+            worker.setSocket(2407);
+            System.out.println("inicializa el worker");
             executor.execute(worker);
         }
         System.out.println("Server Stopped.") ;

@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-public class Lab3 {
+public class Lab4 {
     public static void main(String[] args) throws IOException {
         
         if (args.length != 1) {

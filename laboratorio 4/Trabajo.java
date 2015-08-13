@@ -29,13 +29,14 @@ public class Trabajo implements Runnable{
             String firstLine = inputLine;
             String method = inputLine.substring(0,inputLine.indexOf(" "));
             System.out.println(method);
-            if (method.equals("HEAD")) {
+            if (method.equals("HELO")) {
                 output.write((inputLine+"\n").getBytes());
                 while (!(inputLine = in.readLine()).equals(""))
                     output.write((inputLine+"\n").getBytes());
+                //System.out.println("recibi helo");
             } else {
                 if (method.equals("GET")) {
-                    String page = firstLine.substring(firstLine.indexOf(" ")+2, firstLine.la    stIndexOf(" "));
+                    String page = firstLine.substring(firstLine.indexOf(" ")+2, firstLine.lastIndexOf(" "));
                     try {
                         BufferedReader in2 = new BufferedReader(new FileReader(page));
                         String str;
