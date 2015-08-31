@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 
 public class TCPServer implements Runnable{
 
-   protected int          serverPort   = 6789;
+   protected int          serverPort   = 2525;
    protected ServerSocket serverSocket = null;
    protected boolean      isStopped    = false;
    protected Thread       runningThread= null;
@@ -63,15 +63,15 @@ public class TCPServer implements Runnable{
     }
 
    public static void main (String[] args){
-      TCPServer server = new TCPServer(6789);
+      TCPServer server = new TCPServer(2525);
       new Thread(server).start();
 
-      try {
-          Thread.sleep(20 * 1000);
+      /*try {
+          Thread.sleep(20 * 10000);
       } catch (InterruptedException e) {
           e.printStackTrace();
       }
       System.out.println("Stopping Server");
-      server.stop();
+      server.stop();*/
    }
 }
