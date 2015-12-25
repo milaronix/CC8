@@ -1,0 +1,744 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- Took this out for IE6ites "http://www.w3.org/TR/REC-html40/loose.dtd" -->
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <title>Simple Construction of a RAW TCP/IP Packet.</title>
+    
+    <!-- Theme : Web safe blue PerlMonks Theme    -->
+    <link rel="stylesheet" href="Simple%20Construction%20of%20a%20RAW%20TCP_IP%20Packet_files/common.css" type="text/css">
+    <link rel="stylesheet" href="Simple%20Construction%20of%20a%20RAW%20TCP_IP%20Packet_files/a.css" type="text/css">
+    <!-- No CSS Link in Display Settings -->
+    <!-- No CSS Data in Display Settings -->
+    <link rel="icon" href="http://www.perlmonks.org/favicon.ico">
+    
+
+  </head>
+
+  <body id="id-17576">
+<!-- monktainer -->
+<!-- monkbar2001 -->
+
+    <table id="monkbar" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tbody><tr class="bannerrow">
+        <td align="left" width="100%">
+        <a href="http://pair.com/">
+ <img src="Simple%20Construction%20of%20a%20RAW%20TCP_IP%20Packet_files/pair-banner-current.gif" alt="Beefy Boxes and Bandwidth Generously Provided by pair Networks" height="60" width="468">
+</a>
+        </td>
+        <td rowspan="2" align="right" valign="bottom">
+          <!-- Monk Pic Turned Off In User Settings -->
+        </td>
+      </tr>
+      <tr class="monkquip">
+        <td class="monkquip" valign="bottom" width="100%">
+          P is for Practical
+        </td>
+      </tr>
+      <tr class="titlebar">
+        <td class="titlebar">
+
+          <form method="get" action="?" enctype="application/x-www-form-urlencoded">
+            &nbsp;
+            <input name="node" id="search_text" size="20" maxlength="300" type="text">
+            <input class="titlebar" value="Search" type="submit">
+          </form>
+        </td>
+        <td class="titlebar" id="mb2001titlebar" align="right">
+          <a class="titlebar" href="http://www.perlmonks.org/?">PerlMonks</a>&nbsp;&nbsp;
+        </td>
+      </tr>
+    </tbody></table>
+
+<!-- /monkbar2001 -->
+<!-- Begin title bar -->
+<table id="titlebar-top" align="center" width="98%">
+  <tbody>
+    <tr>
+      <td class="titlechooser" valign="middle">
+        <!-- superdoc title chooser(1) -->
+        <h3 class="other">Simple Construction of a RAW TCP/IP Packet.</h3><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=17542">cleen</a><span class="attribution-title"> (Pilgrim)</span></span>
+        <!-- /superdoc title chooser(1) -->
+      </td>
+      <td class="monktitlebar" align="right" valign="top">
+        <!-- monktitlebar -->
+        <ul class="topnavmenu inline-list">
+<li><a href="http://www.perlmonks.org/?node_id=109">Log&nbsp;in</a></li><li><a href="http://www.perlmonks.org/?node_id=101">Create&nbsp;a&nbsp;new&nbsp;user</a></li>
+<li><a href="http://www.perlmonks.org/?">The&nbsp;Monastery&nbsp;Gates</a></li>
+<li><a href="http://www.perlmonks.org/?node=Super%20Search">Super&nbsp;Search</a></li>
+<br>
+<li><a href="http://www.perlmonks.org/?node=Seekers%20of%20Perl%20Wisdom">Seekers&nbsp;of&nbsp;Perl&nbsp;Wisdom</a></li>
+<li><a href="http://www.perlmonks.org/?node=Meditations">Meditations</a></li>
+<li><a href="http://www.perlmonks.org/?node=Perl%20Monks%20Discussion">PerlMonks&nbsp;Discussion</a></li>
+<br>
+<li><a href="http://www.perlmonks.org/?node=Obfuscated%20Code">Obfuscation</a></li>
+<li><a href="http://www.perlmonks.org/?node=Reviews">Reviews</a></li>
+<li><a href="http://www.perlmonks.org/?node=Cool%20Uses%20for%20Perl">Cool&nbsp;Uses&nbsp;For&nbsp;Perl</a></li>
+<li><a href="http://www.perlmonks.org/?node=Perl%20News">Perl&nbsp;News</a></li>
+<li><a href="http://www.perlmonks.org/?node=Categorized%20Questions%20and%20Answers">Q&amp;A</a></li>
+<li><a href="http://www.perlmonks.org/?node=Tutorials">Tutorials</a></li>
+<br>
+<li><a href="http://www.perlmonks.org/?node=Perl%20Poetry">Poetry</a></li>
+<li><a href="http://www.perlmonks.org/?node=Recently%20Active%20Threads">Recent&nbsp;Threads</a></li>
+<li><a href="http://www.perlmonks.org/?node=Newest%20Nodes">Newest&nbsp;Nodes</a></li>
+<li><a href="http://www.perlmonks.org/?node=Offering%20Plate">Donate</a></li>
+<li><a href="http://www.perlmonks.org/?node=Tidings">What's&nbsp;New</a></li>
+</ul>
+
+
+        <!-- /monktitlebar -->
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table id="titlebar-bottom" align="center" width="98%">
+  <tbody>
+    <tr>
+      <td class="titlechooser" valign="middle">
+        <!-- superdoc title chooser(2) -->
+        <span class="attribution">on  Jun 11, 2000 at 08:00&nbsp;UTC</span> <span class="addlinks">(&nbsp;#<a href="http://www.perlmonks.org/?node_id=17576">17576</a>=CUFP:&nbsp;<a href="http://www.perlmonks.org/?displaytype=print;node_id=17576">print</a>&nbsp;<a href="http://www.perlmonks.org/?displaytype=print;node_id=17576;replies=1">w/&nbsp;replies</a>, <a href="http://www.perlmonks.org/?displaytype=xml;node_id=17576">xml</a>&nbsp;)</span>
+        <!-- superdoc title chooser(2) -->
+      </td>
+      <td class="monktitlebar" align="right" valign="middle">
+        <a href="http://www.perlmonks.org/?node=PerlMonks%20FAQ">Need Help??</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- End title bar -->
+<!-- Begin main (monktainer) -->
+
+<center>
+  <table width="98%">
+    <tbody><tr>
+      <td class="main_content" valign="top" width="80%">
+        <!--contained stuff-->
+        
+
+
+<p></p><div class="doctext">
+I wrote this a long while back just to learn the basic 
+structs of programming with tcp/ip. Yes its very simple
+but this base struct has provided me with the core of 
+alot of really cool things. (Thanks to tcp/ip Illustrated
+vol. 2 of course :). All this code does is construct the 
+headers, and send a packet from a specifed source host and 
+source port, to a specified destination host and port. 
+Doesnt even rand the inicial sequence number...heheh. But 
+hopefully this will be of use to someone other to myself!
+
+Just an FYI, if this looks all wierd, uhh, Im having a 
+biotch of a time pasting this code...
+
+<pre class="code"><div class="codeblock"><tt class="codetext">#!/usr/local/bin/perl
+# Dont make fun of my path
+
+use Socket;
+
+$src_host = $ARGV[0]; # The source IP/Hostname
+$src_port = $ARGV[1]; # The Source Port
+$dst_host = $ARGV[2]; # The Destination IP/Hostname
+$dst_port = $ARGV[3]; # The Destination Port.
+
+ if(!defined $src_host or !defined $src_port or !defined $dst_host or <span class="line-breaker">
+<font color="red">+</font></span>!defined $dst_port) {
+   print "Usage: $0 &lt;source host&gt; &lt;source port&gt; &lt;dest host&gt; &lt;dest port<span class="line-breaker">
+<font color="red">+</font></span>&gt;\n";
+   exit;
+ } 
+ else {
+  main();
+ }
+ 
+sub main {
+ my $src_host = (gethostbyname($src_host))[4];
+ my $dst_host = (gethostbyname($dst_host))[4];
+
+ socket(RAW, AF_INET, SOCK_RAW, 255) || die $!;
+ setsockopt(RAW, 0, 1, 1);
+ 
+ my ($packet) = makeheaders($src_host, $src_port, $dst_host, $dst_port<span class="line-breaker">
+<font color="red">+</font></span>);
+ my ($destination) = pack('Sna4x8', AF_INET, $dst_port, $dst_host);
+ send(RAW,$packet,0,$destination);
+}
+
+sub makeheaders {
+ local($src_host,$src_port,$dst_host,$dst_port) = @_;
+ my $zero_cksum = 0;
+ # Lets construct the TCP half
+ my $tcp_proto          = 6;
+ my ($tcp_len)          = 20;
+ my $syn                = 13456;
+ my $ack                = 0;
+ my $tcp_headerlen      = "5";
+ my $tcp_reserved       = 0;
+ my $tcp_head_reserved  = $tcp_headerlen .
+                          $tcp_reserved;
+ my $tcp_urg            = 0; # Flag bits
+ my $tcp_ack            = 0; # eh no
+ my $tcp_psh            = 0; # eh no
+ my $tcp_rst            = 0; # eh no
+ my $tcp_syn            = 1; # yeah lets make a connexion! :)
+ my $tcp_fin            = 0;
+ my $null               = 0;
+ my $tcp_win            = 124;
+ my $tcp_urg_ptr        = 0;
+ my $tcp_all            = $null . $null .
+                          $tcp_urg . $tcp_ack .
+                          $tcp_psh . $tcp_rst .
+                          $tcp_syn . $tcp_fin ;
+
+ # In order to calculate the TCP checksum we have
+ # to create a fake tcp header, hence why we did
+ # all this stuff :) Stevens called it psuedo headers :)
+
+ my ($tcp_pseudo) = pack('a4a4CCnnnNNH2B8nvn',
+  $tcp_len,$src_port,$dst_port,$syn,$ack,
+  $tcp_head_reserved,$tcp_all,$tcp_win,$null,$tcp_urg_ptr);
+
+ my ($tcp_checksum) = &amp;checksum($tcp_pseudo);
+
+ # Now lets construct the IP packet
+ my $ip_ver             = 4;
+ my $ip_len             = 5;
+ my $ip_ver_len         = $ip_ver . $ip_len;
+ my $ip_tos             = 00;
+ my ($ip_tot_len)       = $tcp_len + 20;
+ my $ip_frag_id         = 19245;
+ my $ip_frag_flag       = "010";
+ my $ip_frag_oset       = "0000000000000";
+ my $ip_fl_fr           = $ip_frag_flag . $ip_frag_oset;
+ my $ip_ttl             = 30;
+
+ # Lets pack this baby and ship it on out!
+ my ($pkt) = pack('H2H2nnB16C2na4a4nnNNH2B8nvn',
+  $ip_ver_len,$ip_tos,$ip_tot_len,$ip_frag_id,
+  $ip_fl_fr,$ip_ttl,$tcp_proto,$zero_cksum,$src_host,
+  $dst_host,$src_port,$dst_port,$syn,$ack,$tcp_head_reserved,
+  $tcp_all,$tcp_win,$tcp_checksum,$tcp_urg_ptr);
+
+ return $pkt;
+}
+
+sub checksum {
+ # This of course is a blatent rip from _the_ GOD,
+ # W. Richard Stevens.
+  
+ my ($msg) = @_;
+ my ($len_msg,$num_short,$short,$chk);
+ $len_msg = length($msg);
+ $num_short = $len_msg / 2;
+ $chk = 0;
+ foreach $short (unpack("S$num_short", $msg)) {
+  $chk += $short;
+ }
+ $chk += unpack("C", substr($msg, $len_msg - 1, 1)) if $len_msg % 2;
+ $chk = ($chk &gt;&gt; 16) + ($chk &amp; 0xffff);
+ return(~(($chk &gt;&gt; 16) + $chk) &amp; 0xffff);
+}
+
+
+</tt></div><div class="embed-code-dl"><a href="http://www.perlmonks.org/?abspart=1;displaytype=displaycode;node_id=17576;part=1">[download]</a></div></pre>
+
+
+-cleen
+</div><p></p>
+
+<div class="notes"><center><table id="replies_table" border="0" cellpadding="1" cellspacing="1" width="100%"><tbody><tr><th colspan="2" class="comment-on">
+<a href="http://www.perlmonks.org/?parent=17576;node_id=3333"><u>Comment on</u></a>
+Simple Construction of a RAW TCP/IP Packet.
+<br><a href="http://www.perlmonks.org/?displaytype=displaycode;node_id=17576"><u>Download</u></a> Code<span class="note-ordering"><br>Replies are listed 'Best First'.</span></th></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="17703"></a><a href="http://www.perlmonks.org/?node_id=17703">RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=5606">JanneVee</a><span class="attribution-title"> (Friar)</span> on Jun 12, 2000 at 17:56&nbsp;UTC</span></td></tr>
+<tr class="reply-body pmnote-5606" bgcolor="ffffff"><td class="reply-body"><ul class="indent">This is an interesting insight to a TCP/IP packet...  And actually I consider this example simpler than the C examples. </ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=17703;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="17819"></a><ul class="indent"><a href="http://www.perlmonks.org/?node_id=17819">RE: RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=17542">cleen</a><span class="attribution-title"> (Pilgrim)</span> on Jun 13, 2000 at 04:08&nbsp;UTC</span></ul></td></tr>
+<tr class="reply-body pmnote-17542" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent">The
+ fact is, perl is the bomb, I havnt really been given a good example why
+ C is so much better then perl, Ive heard people say it, but never been 
+given a REASONABLE example, they claim efficiency, less process time, 
+bah, in either case, if the programmer doesnt know what they are doing 
+they are going to be in-efficient. Reality: Perl can be faster, and more
+ efficient then C if it is written properly.
+<br><br>
+on a side note, I am in the process of writing more raw socket examples 
+for perl monks, IE constructing ICMP packets (what I am currently 
+working on), to even constructing multicast packets...Its really fun to 
+do, really it is :)
+<br><br>
+-cleen</ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=17819;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="17880"></a><ul class="indent"><ul class="indent"><a href="http://www.perlmonks.org/?node_id=17880">RE: RE: RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=5606">JanneVee</a><span class="attribution-title"> (Friar)</span> on Jun 13, 2000 at 16:38&nbsp;UTC</span></ul></ul></td></tr>
+<tr class="reply-body pmnote-5606" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent"><ul class="indent">I'm just waiting to see and excited to see the end result of that. Crazy idea: a traceroute perlscript!</ul></ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=17880;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="334222"></a><ul class="indent"><ul class="indent"><ul class="indent"><a href="http://www.perlmonks.org/?node_id=334222">Re: RE: RE: RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Mar 05, 2004 at 14:33&nbsp;UTC</span></ul></ul></ul></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="298646"></a><ul class="indent"><ul class="indent"><a href="http://www.perlmonks.org/?node_id=298646">Re: RE: RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Oct 12, 2003 at 13:24&nbsp;UTC</span></ul></ul></td></tr>
+<tr class="reply-body pmnote-961" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent"><ul class="indent">you really do a great  job. 
+i'm looking forward to some work for same thing.
+can i communicate with you by email?
+
+Thanks
+my email:toy1@21cn.com
+name: haijun  
+nation:  China   </ul></ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=298646;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="1094479"></a><ul class="indent"><a href="http://www.perlmonks.org/?node_id=1094479">Re^2: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=1094456">tahirfattani</a><span class="attribution-title"> (Initiate)</span> on Jul 21, 2014 at 12:50&nbsp;UTC</span></ul></td></tr>
+<tr class="reply-body pmnote-1094456" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent"> <p>
+ 
+I am sending a packets from client machine to server machine. I have 4 
+dynamic fields i.e. source IP address ,Source Port , Destination IP 
+address and Destination Port
+
+All four fields are calling from file.
+
+It means every times generating new IP packets which have different IP 
+addresses and Ports.
+
+Question is that,
+
+For example If I want to send the 100,000 packets per second for the 
+duration of 10 seconds.So my total send packets is 1 Million. But they 
+are sending not more than 26 thousands.
+
+I am using one variable DIM...for suppose I change this field like that 
+$dim=1; instead of $dim= scalar(@lines); then it is perfectly work and 
+send 1 Million Packets(but everytime same packets which is not my 
+requirement).
+
+Itz means my program can generate 1 Million packets.
+
+I want to generate the different packets .Please help me where I am 
+lacking???</p> 
+<pre class="code"><div class="codeblock"><tt class="codetext"> 
+#! /usr/bin/perl -s
+
+use Net::RawSock;
+use NetPacket::IP;
+use NetPacket::TCP;
+use Time::HiRes qw(usleep gettimeofday tv_interval);
+use feature qw/say/;
+use Benchmark;
+
+if(!defined $n or !defined $secs )
+        {
+        print "Usage: ./packgen.pl  -n=&lt;number of packets/sec&gt; -secs=&lt;<span class="line-breaker">
+<font color="red">+</font></span>number of seconds&gt; \n";
+        exit;
+        } 
+
+print "\nCreating Packets ....";
+open (FILE, '/home/tahir/Downloads/packet_generator.txt');
+chomp (@lines = (&lt;FILE&gt;));
+close(FILE);
+
+## Create IP
+my $ip_obj = NetPacket::IP-&gt;decode(''); 
+
+## Init IP
+$ip_obj-&gt;{ver}        = 4; 
+$ip_obj-&gt;{hlen}       = 5;
+$ip_obj-&gt;{tos}        = 0;
+$ip_obj-&gt;{id}         = 0x1d1d;
+$ip_obj-&gt;{ttl}        = 0x5a;
+$ip_obj-&gt;{flags}      = 2;
+$ip_obj-&gt;{len}        = 84;
+
+## Create TCP
+my $tcp_obj = NetPacket::TCP-&gt;decode('');
+
+## Init TCP
+$tcp_obj-&gt;{hlen}      = 5;
+$tcp_obj-&gt;{winsize}   = 0x8e30;
+$tcp_obj-&gt;{seqnum}    = 0xFFFF;
+$tcp_obj-&gt;{acknum}    = 0xCCCC;
+$tcp_obj-&gt;{flags}     = SYN;
+$tcp_obj-&gt;{data}      =ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmn;
+
+## Assemble
+$ip_obj-&gt;{proto}      = 6; 
+$ip_obj-&gt;{data}       = $tcp_obj-&gt;encode($ip_obj);
+                        
+            $num =0;
+            for ($num = 0; $num&lt;=@lines; $num++)
+            {
+            $line=$lines[$num];
+            #for every line in the lines
+            #build packet
+            my($sip, $sport, $dip, $dport) = split(/\s+/, $line);     <span class="line-breaker">
+<font color="red">+</font></span>       
+            $ip_obj-&gt;{src_ip}     = $sip;
+            $tcp_obj-&gt;{src_port}  = $sport;
+            $ip_obj-&gt;{dest_ip}    = $dip;            
+            $tcp_obj-&gt;{dest_port} = $dport;
+            #print ": $sip\t";
+            #print ": $sport\t";
+            #print " : $dip\t";
+            #print ": $dport\n";
+                    
+            ## Create RAW
+            
+            @packets[$num] = $ip_obj-&gt;encode;
+            #say $lines[$j];
+            #add packet to a vector of packets
+            #end for
+            #Now we have an array of packets
+            }
+
+#you want n pkt/sec for 10 seconds, so
+#you want n/1000 pkt per 1/1000 sec 
+      $num=0;
+    $count = 0;
+    $pkts_per_ms = $n / 1000;
+    $start = time(); #[Time::HiRes::gettimeofday];
+    $dim= scalar(@lines); 
+#    $TEST=$packets[0];
+    while ( ((time()-$start)&lt;($secs)) || ($count &lt; ($n*$secs)))
+    {
+        $before = [Time::HiRes::gettimeofday];
+        for ($i=$pkts_per_ms;$i&gt;0;$i--)
+        {
+             $num=($num+1)% $dim ;
+            #if now packets is the array of packets,you will send 
+             Net::RawSock::write_ip($packets[$num]);
+        #    Net::RawSock::write_ip($TEST);    
+        }
+        while (tv_interval($before)&lt;0.001)
+        {
+            #print tv_interval($before), " ";
+        }
+        $count = $count + $pkts_per_ms;
+    } 
+    print "TIME: ", time()-$start, "\n";
+
+    #print "You took ", tv_interval($start), " seconds for sending $co<span class="line-breaker">
+<font color="red">+</font></span>unt packets.\n";
+    print "You took ", time() - $start, " seconds for sending $count p<span class="line-breaker">
+<font color="red">+</font></span>ackets.\n";
+
+
+
+ 
+</tt></div><div class="embed-code-dl"><a href="http://www.perlmonks.org/?abspart=1;displaytype=displaycode;node_id=1094479;part=1">[download]</a></div></pre>
+
+</ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=1094479;node_id=3333">[reply]</a><br><a href="http://www.perlmonks.org/?displaytype=displaycode;node_id=1094479">[d/l]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="18016"></a><a href="http://www.perlmonks.org/?node_id=18016">RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=15128">brick</a><span class="attribution-title"> (Sexton)</span> on Jun 14, 2000 at 05:04&nbsp;UTC</span></td></tr>
+<tr class="reply-body pmnote-15128" bgcolor="ffffff"><td class="reply-body"><ul class="indent">I wonder if this could be combined with some of the portscanner
+bits that have been posted lately...so then you could make an
+adjustable packet size autoscanning sort of thing to create
+signatures for a log munger-- something that looked for that
+kind of traffic and then noted it?
+
+Hrmmmm. Kind of building a tool to build a tool, but...
+
+-brick.</ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=18016;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="18035"></a><ul class="indent"><a href="http://www.perlmonks.org/?node_id=18035">RE: RE: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=17542">cleen</a><span class="attribution-title"> (Pilgrim)</span> on Jun 14, 2000 at 06:55&nbsp;UTC</span></ul></td></tr>
+<tr class="reply-body pmnote-17542" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent">Definatly,
+ and I have done a simple port scanner with this, with options found 
+much like in the Nmap scanner, IE fin scans (set your fin bit to 1 in 
+the code, and the syn bit to 0) and look for ACK/RST for closed ports. 
+Having the ability to construct the headers the way you want has 
+infinate uses, at least in my mind.</ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=18035;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="389533"></a><ul class="indent"><a href="http://www.perlmonks.org/?node_id=389533">Re^2: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Sep 09, 2004 at 01:31&nbsp;UTC</span></ul></td></tr>
+<tr class="reply-body pmnote-961" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent">Hey,
+ have you finished that raw icmp paper? I'm coding, and I can't any 
+thing that gives me the info on the type, code, chksum, identifier and 
+seq # and how to pack them, icmp style.
+
+I def. want to check that out. You did a great job on the last one. 
+Anyways, let me know. skyline@mdhrecords.com
+thanks!</ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=389533;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="844426"></a><a href="http://www.perlmonks.org/?node_id=844426">Re: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Jun 13, 2010 at 10:47&nbsp;UTC</span></td></tr>
+<tr class="reply-body pmnote-961" bgcolor="ffffff"><td class="reply-body"><ul class="indent">Hi,<br>
+Thanks for this piece of code - it wonderful. However, I noticed that it
+ appears that the tcp checksum calculation is not correct. I made tcp 
+captures and tcpdump report the checksum is incorrect for TCP. I could 
+not get any server to answer SYN-ACK to this SYN packet (tried with 
+standard sshd and httpd), which confirms that the checksum is wrong. I 
+am doing the research right now and trying to rewrite the checksum part.<br>
+Cheers, Alex</ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=844426;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="909956"></a><ul class="indent"><a href="http://www.perlmonks.org/?node_id=909956">Re^2: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Jun 16, 2011 at 13:56&nbsp;UTC</span></ul></td></tr>
+<tr class="reply-body pmnote-961" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent">Alex-
+
+Did you manage to get anywhere with the re-write?</ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=909956;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="1010642"></a><a href="http://www.perlmonks.org/?node_id=1010642">Re: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Dec 28, 2012 at 05:59&nbsp;UTC</span></td></tr>
+<tr class="reply-body pmnote-961" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><p>
+Just to share, the code above working properly after updating TCP checksum generation parameter to:
+</p>
+<pre class="code"><div class="codeblock"><tt class="codetext"> my ($tcp_pseudo) = pack('a4a4CCnnnNNH2B8nvn',
+  $src_host,$dst_host,0,$tcp_proto,$tcp_len,
+  $src_port,$dst_port,$syn,$ack,
+  $tcp_head_reserved,$tcp_all,$tcp_win,$null,$tcp_urg_ptr);
+</tt></div><div class="embed-code-dl"><a href="http://www.perlmonks.org/?abspart=1;displaytype=displaycode;node_id=1010642;part=1">[download]</a></div></pre>
+
+</ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=1010642;node_id=3333">[reply]</a><br><a href="http://www.perlmonks.org/?displaytype=displaycode;node_id=1010642">[d/l]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="1119902"></a><ul class="indent"><a href="http://www.perlmonks.org/?node_id=1119902">Re^2: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=1058717">iThunder</a><span class="attribution-title"> (Acolyte)</span> on Mar 13, 2015 at 03:54&nbsp;UTC</span></ul></td></tr>
+<tr class="reply-body pmnote-1058717" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><ul class="indent">Hello,
+
+I
+ am trying to use this code to send TCP/IP packet but looks like it is 
+not compiling correctly...the protocol field in IP header is 255 (same 
+as one mentioned in socket(RAW,.....). 
+Has anyone run into this issue?</ul></ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=1119902;node_id=3333">[reply]</a></td></tr>
+<tr class="reply" bgcolor="#eeeeee"><td colspan="2"><a name="1120076"></a><a href="http://www.perlmonks.org/?node_id=1120076">Re: Simple Construction of a RAW TCP/IP Packet.</a><br><span class="attribution"> by <a href="http://www.perlmonks.org/?node_id=961">Anonymous Monk</a> on Mar 14, 2015 at 19:35&nbsp;UTC</span></td></tr>
+<tr class="reply-body pmnote-961" bgcolor="ffffff"><td class="reply-body"><ul class="indent"><p>
+Please note that the <tt class="inlinecode">checksum</tt> subroutine given in the OP is insidiously buggy for odd length arguments (which is never the case here). Since <tt class="inlinecode">$num_short</tt> calculation is missing <tt class="inlinecode">int()</tt>, the unpack template ends in ".5", which in turn inserts an erroneous element to the loop.</p>
+<p>
+Anyone reading this thread is probably better served by searching for newer and more mature examples.</p>
+</ul></td><td class="reply-body adjunct-links" align="left" valign="bottom"><a href="http://www.perlmonks.org/?parent=1120076;node_id=3333">[reply]</a><br><a href="http://www.perlmonks.org/?displaytype=displaycode;node_id=1120076">[d/l]</a><br><a href="http://www.perlmonks.org/?displaytype=selectcode;node_id=1120076">[select]</a></td></tr>
+</tbody></table></center>
+</div>
+
+<p></p><div class="link-back back-to">
+Back to
+<a href="http://www.perlmonks.org/?node=Cool%20Uses%20for%20Perl">Cool Uses for Perl</a>
+</div><p></p>
+
+
+        <!--/contained stuff-->
+      </td>
+      <!--nodelet handling code (monktainer)-->
+      <td class="nodelets" align="right" valign="top" width="20%">
+        <!-- Begin nodelets -->
+<table class="nodelet_container" id="nodelet_container">
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Log_In">
+      <tr><th class="nodelet_head">
+          <span class="title">Log In</span><a href="http://www.perlmonks.org/?node=About%20the%20Log%20In" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<form method="post" action="?" enctype="multipart/form-data" name="login">
+<div style="display:none"><input name="node_id" value="17576" type="hidden"></div>
+<input name="op" value="login" type="hidden">
+<input name="lastnode_id" value="17576" type="hidden">
+<table border="0"><tbody><tr><td>
+Username:</td><td>
+<input name="user" size="10" maxlength="34" type="text">
+</td></tr><tr><td>
+Password:</td><td>
+<input name="passwd" size="10" maxlength="10" type="password">
+
+</td></tr></tbody></table>
+<label><input name="expires" value="+10y" type="checkbox">remember me</label>
+<input name="login" value="Login" type="submit">
+<br>
+<a href="http://www.perlmonks.org/?node_id=2513">What's my password?</a>
+<br>
+<a href="http://www.perlmonks.org/?node_id=101">Create A New User</a>
+</form>
+
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Node_Status">
+      <tr><th class="nodelet_head">
+          <span class="title">Node Status</span><a href="http://www.perlmonks.org/?node=About%20the%20Node%20Status" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<a href="http://www.perlmonks.org/?displaytype=edithistory;node_id=17576">node history</a><br>Node Type: CUFP [id://17576]<br>Approved by <a href="http://www.perlmonks.org/?node_id=113">root</a><br><a href="http://www.perlmonks.org/?node_id=17645">help</a>
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Chatterbox">
+      <tr><th class="nodelet_head">
+          <span class="title">Chatterbox</span><a href="http://www.perlmonks.org/?node=About%20the%20Chatterbox" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<form method="get" action="?" enctype="multipart/form-data">
+<div style="display:none"><input name="node_id" value="17576" type="hidden"></div><i class="cb_quiet">and all is quiet...</i><br>
+<input name="foo" value="Refresh" type="submit">
+</form>
+<i><br> <a href="http://www.perlmonks.org/?node=ChatterBox%20FAQ">How do I use this?</a>  |  <a href="http://www.perlmonks.org/?node_id=20842">Other CB clients</a></i>
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Other_Users">
+      <tr><th class="nodelet_head">
+          <span class="title">Other Users</span><a href="http://www.perlmonks.org/?node=About%20the%20Other%20Users" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<span class="other-users-text">Others <span class="other-users-blurb">browsing</span> the Monastery:</span> (2)<br><ul class="spacey-list"><li><span class="even-row"><span class="item-000"><span class="user-level-21"><span class="user-44715"><a href="http://www.perlmonks.org/?node_id=44715" title="graff's home node. Level 21">graff</a></span></span></span></span></li>
+<li><span class="odd-row"><span class="item-001"><span class="user-level-18"><span class="user-70929"><a href="http://www.perlmonks.org/?node_id=70929" title="atcroft's home node. Level 18">atcroft</a></span></span></span></span></li>
+</ul><span class="update-time"><small>As of 2015-09-24 01:23 GMT</small></span>
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Sections">
+      <tr><th class="nodelet_head">
+          <span class="title">Sections</span><a href="http://www.perlmonks.org/?node=About%20the%20Sections" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<ul class="spacey-list">
+<li><a href="http://www.perlmonks.org/?node=Seekers%20of%20Perl%20Wisdom">Seekers of Perl Wisdom</a></li>
+<li><a href="http://www.perlmonks.org/?node=Cool%20Uses%20for%20Perl">Cool Uses for Perl</a></li>
+<li><a href="http://www.perlmonks.org/?node=Meditations">Meditations</a></li>
+<li><a href="http://www.perlmonks.org/?node=Perl%20Monks%20Discussion">PerlMonks Discussion</a></li>
+<li><a href="http://www.perlmonks.org/?node=Categorized%20Questions%20and%20Answers">Categorized Q&amp;A</a></li>
+<li><a href="http://www.perlmonks.org/?node=Tutorials">Tutorials</a></li>
+<li><a href="http://www.perlmonks.org/?node=Obfuscated%20Code">Obfuscated Code</a></li>
+<li><a href="http://www.perlmonks.org/?node=Perl%20Poetry">Perl Poetry</a></li>
+<li><a href="http://www.perlmonks.org/?node=Perl%20News">Perl News</a></li>
+<li><a href="http://www.perlmonks.org/?node_id=483086">about</a></li>
+</ul>
+
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Information">
+      <tr><th class="nodelet_head">
+          <span class="title">Information</span><a href="http://www.perlmonks.org/?node=About%20the%20Information" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<ul class="spacey-list">
+<li><a href="http://www.perlmonks.org/?node=PerlMonks%20FAQ">PerlMonks FAQ</a></li>
+<li><a href="http://www.perlmonks.org/?node=the%20Perl%20Monks%20guide%20to%20the%20Monastery">Guide to the Monastery</a></li>
+<li><a href="http://www.perlmonks.org/?node=Tidings">What's New at PerlMonks</a></li>
+<li><a href="http://www.perlmonks.org/?node=Voting%2FExperience%20System">Voting/Experience System</a></li>
+<li><a href="http://www.perlmonks.org/?node=Tutorials">Tutorials</a></li>
+<li><a href="http://www.perlmonks.org/?node=Reviews">Reviews</a></li>
+<li><a href="http://www.perlmonks.org/?node=Library">Library</a></li>
+<li><a href="http://www.perlmonks.org/?node=perlman%3Aperlfaq">Perl FAQs</a></li>
+<li><a href="http://www.perlmonks.org/?node=Where%20can%20I%20find%20more%20information%20on...">Other Info Sources</a></li>
+</ul>
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Find_Nodes">
+      <tr><th class="nodelet_head">
+          <span class="title">Find Nodes</span><a href="http://www.perlmonks.org/?node=About%20the%20Find%20Nodes" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<ul class="spacey-list">
+<li><a href="http://www.perlmonks.org/?node_id=6364;user=961">Nodes You Wrote</a></li>
+<li><a href="http://www.perlmonks.org/?node=Super%20Search">Super Search</a></li>
+<li><a href="http://www.perlmonks.org/?node=Perl%20Monks%20User%20Search">List Nodes By Users</a></li>
+<li><a href="http://www.perlmonks.org/?node=Newest%20Nodes">Newest Nodes</a></li>
+<li><a href="http://www.perlmonks.org/?node=Recently%20Active%20Threads">Recently Active Threads</a></li>
+<li><a href="http://www.perlmonks.org/?node=Selected%20Best%20Nodes">Selected Best Nodes</a></li>
+<li><a href="http://www.perlmonks.org/?node=Best%20Nodes">Best Nodes</a></li>
+<li><a href="http://www.perlmonks.org/?node=Worst%20Nodes">Worst Nodes</a></li>
+<li><a href="http://www.perlmonks.org/?node=Saints%20in%20our%20Book">Saints in our Book</a></li>
+</ul>
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Leftovers">
+      <tr><th class="nodelet_head">
+          <span class="title">Leftovers</span><a href="http://www.perlmonks.org/?node=About%20the%20Leftovers" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<ul class="spacey-list" id="user"></ul>
+<ul class="spacey-list" id="internal">
+<li><a href="http://www.perlmonks.org/?node=The%20St.%20Larry%20Wall%20Shrine">The St. Larry Wall Shrine</a></li>
+<li><a href="http://www.perlmonks.org/?node_id=781756">Buy PerlMonks Gear</a></li>
+<li><a href="http://www.perlmonks.org/?node=Offering%20Plate">Offering Plate</a></li>
+<li><a href="http://www.perlmonks.org/?node=Awards">Awards</a></li>
+<li><a href="http://www.perlmonks.org/?op=randomnode">Random Node</a></li>
+<li><a href="http://www.perlmonks.org/?node=Quests">Quests</a></li>
+<li><a href="http://www.perlmonks.org/?node=Craft">Craft</a></li>
+<li><a href="http://www.perlmonks.org/?node=Snippets%20Section">Snippets</a></li>
+<li><a href="http://www.perlmonks.org/?node=Code%20Catacombs">Code Catacombs</a></li>
+<li><a href="http://www.perlmonks.org/?node=Editor%20Requests">Editor Requests</a></li>
+</ul><ul class="spacey-list" id="external">
+<li><a href="http://blogs.perl.org/">blogs.perl.org</a></li>
+<!--<li>[http://planet.perl.org/|Planet Perl]</li>-->
+<li><a href="http://perlsphere.net/">Perlsphere</a></li>
+<li><a href="http://ironman.enlightenedperl.org/">Perl Ironman Blog</a></li>
+<li><a href="http://perlweekly.com/">Perl Weekly</a></li>
+<li><a href="http://perl.com/">Perl.com</a></li>
+<li><a href="http://www.perlfoundation.org/perl5/index.cgi">Perl 5 Wiki</a></li>
+<li><a href="http://jobs.perl.org/">Perl Jobs</a></li>
+<li><a href="http://www.pm.org/">Perl Mongers</a></li>
+<li><a href="http://www.perl.org/">Perl Directory</a></li>
+<li><a href="http://perldoc.perl.org/">Perl documentation</a></li>
+<li><a href="https://metacpan.org/">MetaCPAN</a></li>
+<li><a href="http://cpan.perl.org/">CPAN</a></li>
+</ul>
+
+
+      </td></tr>
+
+    </tbody>
+
+<!-- Nodelet Break -->
+    <tbody class="nodelet" id="Voting_Booth">
+      <tr><th class="nodelet_head">
+          <span class="title">Voting Booth</span><a href="http://www.perlmonks.org/?node=About%20the%20Voting%20Booth" class="nodelethead-annot"><sup>?</sup></a>
+      </th></tr>
+      <tr><td class="nodelet_body">
+
+<h4>My preferred temperature scale is:</h4><form method="post" action="?" enctype="multipart/form-data">
+<div style="display:none"><input name="displaytype" value="display" type="hidden"><input name="node_id" value="1140638" type="hidden"></div>
+<p>
+<label><input name="vote" value="0" type="radio"><a href="https://en.wikipedia.org/wiki/Celsius">Celsius</a>
+</label><br> <label><input name="vote" value="1" type="radio"><a href="https://en.wikipedia.org/wiki/Delisle_scale">Delisle</a>
+</label><br> <label><input name="vote" value="2" type="radio"><a href="https://en.wikipedia.org/wiki/Fahrenheit">Fahrenheit</a>
+</label><br> <label><input name="vote" value="3" type="radio"><a href="https://en.wikipedia.org/wiki/Kelvin">Kelvin</a>
+</label><br> <label><input name="vote" value="4" type="radio"><a href="https://en.wikipedia.org/wiki/Newton_scale">Newton</a>
+</label><br> <label><input name="vote" value="5" type="radio"><a href="https://en.wikipedia.org/wiki/Rankine_scale">Rankine</a>
+</label><br> <label><input name="vote" value="6" type="radio"><a href="https://en.wikipedia.org/wiki/R%C3%A9aumur_scale">Réaumur</a>
+</label><br> <label><input name="vote" value="7" type="radio"><a href="https://en.wikipedia.org/wiki/R%C3%B8mer_scale">Rømer</a>
+</label><br> <label><input name="vote" value="8" type="radio">I have <a href="https://en.wikipedia.org/wiki/Absolute_zero">absolutely zero</a> preference</label><br><input value="Vote" type="submit">
+</p>
+</form>
+
+<p>
+<a href="http://www.perlmonks.org/?node_id=1140638">Results (503 votes)</a>, 
+<a href="http://www.perlmonks.org/?node=past%20polls">past polls</a></p>
+      </td></tr>
+
+    </tbody>
+
+
+</table>
+
+        <!-- End nodelets -->
+      </td>
+
+      <!--/nodelet handling code (monktainer)-->
+
+    </tr>
+  </tbody></table>
+</center>
+
+<!-- End main (monktainer)-->
+<br>
+<br>
+
+<div id="footer">
+          PerlMonks graciously bestowed by <a href="http://www.perlmonks.org/?node=vroom">Tim Vroom</a>.<br>
+      PerlMonks somehow became entangled with
+      <a href="http://www.perlfoundation.org/">The Perl Foundation</a>.<br>
+      Beefy Boxes and Bandwidth Generously Provided by
+      <a href="http://promote.pair.com/direct.pl?perlmonks.org">
+      pair Networks</a>
+
+  <br>Built with the <a href="http://perl.org/">Perl programming language</a>.
+</div>
+<!-- /monktainer -->
+
+  
+      
+</body></html>
